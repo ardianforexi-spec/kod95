@@ -2276,27 +2276,58 @@ const getAnswerState = (questionId, correctIndex) => {
   return selectedIndex === correctIndex ? "correct" : "wrong";
 };
 
+let currentAudio = null;
+
 const stopSpeaking = () => {
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
+  if (currentAudio) {
+    currentAudio.audio.pause();
+    currentAudio.audio.currentTime = 0;
+    URL.revokeObjectURL(currentAudio.url);
+    currentAudio = null;
   }
 };
 
-const speakText = (text, onEnd) => {
-  if (!("speechSynthesis" in window)) {
-    authStatus.textContent = "Browseri yt nuk e perkrah leximin me ze.";
-    return;
-  }
-
+const speakText = async (text, onEnd) => {
   stopSpeaking();
+  authStatus.textContent = "";
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "sq-AL";
-  utterance.rate = 0.95;
-  utterance.pitch = 1;
-  utterance.onend = onEnd;
-  utterance.onerror = onEnd;
-  window.speechSynthesis.speak(utterance);
+  try {
+    const response = await fetch("/api/tts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || "Nuk u krijua audio.");
+    }
+
+    const audioBlob = await response.blob();
+    const url = URL.createObjectURL(audioBlob);
+    const audio = new Audio(url);
+    currentAudio = { audio, url };
+
+    audio.addEventListener("ended", () => {
+      URL.revokeObjectURL(url);
+      currentAudio = null;
+      onEnd();
+    });
+
+    audio.addEventListener("error", () => {
+      URL.revokeObjectURL(url);
+      currentAudio = null;
+      authStatus.textContent = "Audio nuk mundi te luhet ne kete pajisje.";
+      onEnd();
+    });
+
+    await audio.play();
+  } catch (error) {
+    authStatus.textContent = error.message;
+    onEnd();
+  }
 };
 
 const createMultipleChoiceCard = (question, index) => {
