@@ -557,6 +557,14 @@ h3 {
   opacity: 0.45;
 }
 
+.audio-status {
+  min-height: 22px;
+  margin: -2px 0 0;
+  color: var(--red);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 .answer-reveal {
   display: none;
   width: 100%;
