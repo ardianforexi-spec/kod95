@@ -1947,6 +1947,165 @@ realTests.C[5] = {
   },
 };
 
+realTests["D-PJESSHME"] = {
+  1: {
+    name: "Testi 1",
+    partOne: [
+      {
+        prompt:
+          "Ne stacionin e autobusit udhetari deshiron te ju dorezoje si bagazh nje pako te madhe me permasa 2x2 m dhe te rende 1.500 kg. Ku do ta vendosni ne autobus dhe si do ta perforconi?",
+        options: [
+          "E vendos ne rimorkio, ku fiksimi nuk eshte i nevojshem.",
+          "E vendos ne bagazh (bunker) dhe e lidh me rripa.",
+          "Ngarkesen nuk e pranoj per transport pasi i kalon permasat dhe peshen e lejuar per transport ne autobus.",
+          "E vendos ne bagazhin e autobusit dhe e lidh me rripa.",
+        ],
+        correctIndex: 2,
+      },
+      {
+        prompt:
+          "Gjate linjes publike te autobusit per transportin e udhetarve ne autobus hyjne dy udhetare, te cilet ulen ne karriget e para te autobusit. Cila eshte detyra e juaj?",
+        options: [
+          "Qe ti paralajmroj se duhet te lidhen me rrypin e sigurimit.",
+          "Per t'i drejtuar ato ne sediljet e pasme, sepse eshte me e sigurt.",
+          "Per t'i paralajmeruar se kur do te arrije autobusi ne stacionin e fundit.",
+          "Per t'i pyetur nese kane bagazh.",
+        ],
+        correctIndex: 0,
+      },
+      {
+        prompt:
+          "Me cilat nga masat e meposhtme preventive, ka mundesi qe shoferi te zvogloj mundesin e formave te ndryshme kriminele gjat rruges ose ne kohen qe ben transportin e udhetarve?",
+        options: [
+          "Qe pasagjeret te mos dalin nga autobusi gjate transportit.",
+          "Qe mjetin, udhetaret dhe bagazhet gjate gjith kohes i mbikqyr.",
+          "Per te vulosur bagazhin e autobusit.",
+          "Per te mos u larguar nga autobusi.",
+        ],
+        correctIndex: 1,
+      },
+      {
+        prompt: "Cili bagazh eshte bagazh i pashoqeruar?",
+        options: [
+          "Ai qe udheton me te njejtin mjet me pasagjerin.",
+          "Ai qe transportohet pavarsisht nga udhetimi i udhetarit.",
+          "Ai qe humbet ose demtohet gjate transportit.",
+          "Nje qe nuk humbet apo demtohet gjate transportit.",
+        ],
+        correctIndex: 1,
+      },
+      {
+        prompt: "Qfare eshte linja e veqante e transportit te udhetarve?",
+        options: [
+          "Transport i nje lloji te udhetarve.",
+          "Transporti i te gjithe pasagjereve ne kushte te barabarta.",
+          "Transporti me linje ne zonen e qytetit.",
+          "Transporti i udhetareve ne nje itinerar te percaktuar nga vete ata.",
+        ],
+        correctIndex: 0,
+      },
+      {
+        prompt:
+          "Ku eshte i percaktuar lloji i transportit, rendi i stacioneve te autobuseve, koha e mberritjes dhe e nisjes, dhe ndalesa e autobusit?",
+        options: [
+          "Ne orarin e transportit.",
+          "Ne fleten shoqeruese per pasagjeret.",
+          "Ne kushtet e pergjithshme te transportit.",
+          "Ne aktin per kontrollin e brendshem.",
+        ],
+        correctIndex: 0,
+      },
+      {
+        prompt: "Kur duhet shoferi i transportuesit te informoj stacionin me te afert te autobusit per vonesen?",
+        options: [
+          "Nese gjate udhetimit krijohen rrethana qe shkaktojne nje vonese me shume se 15 minuta.",
+          "Nese gjate udhetimit formohen rrethanat, per te cilat do te kishte me shume se 30 min vonese.",
+          "Ai nuk eshte i detyruar te informoje.",
+          "Nese lindin rrethana gjate udhetimit, per shkak te te cilave ai parashikon nje vonese prej me shume se nje ore.",
+        ],
+        correctIndex: 1,
+      },
+      {
+        prompt: "Qfare eshte itenerari i udhetimit?",
+        options: [
+          "Eshte dokument, qe zavendeson lejen per transporte te perkohshme ne qarkullimin e transportit te udhetarve.",
+          "Urdher udhetimi per transport te rastesishem te mallrave.",
+          "Dokument shoqerues qe zevendeson licencen per transportin liner ne transportin rrugor nderkombetar te udhetareve.",
+          "Dokument shoqerues qe zevendeson lejen e transportit te pasagjereve me autotaksi.",
+        ],
+        correctIndex: 0,
+      },
+      {
+        prompt: "A duhet te kete shoferi gjate kryerjes se linjes se veqant te transportit te udhetarve kontrat koncesionare?",
+        options: [
+          "Po gjithmone.",
+          "Po, ose vetem kur kryen transport te rastesishem.",
+          "Jo.",
+          "Jo, sepse kundershtimi nuk eshte konkluduar per kryerjen e trafikut te planifikuar te vecante.",
+        ],
+        correctIndex: 2,
+      },
+      {
+        prompt: "A mundet qe udhetari te kerkoje kthimin e pageses se biletes?",
+        options: [
+          "Po, gjithsesi.",
+          "Jo, ne asnje rrethane.",
+          "Po, nese transporti nuk fillon ne kohen e caktuar.",
+          "Po, nese transporti ka filluar ne kohe ose ka perfunduar me vonese per shkak te trafikut te renduar.",
+        ],
+        correctIndex: 2,
+      },
+    ],
+    partTwo: [
+      {
+        prompt: "Qfare kushte duhet te plotesohen gjate transportit te personave me nevoja personale?",
+        answer:
+          "Konsiderohet transport i personave per nevojat e tyre nese transporti kryhet per qellime jokomerciale dhe jofitimprurese nga persona fizike ose juridike dhe autoritete shteterore, ne lidhje me veprimtarine ose detyrat e tyre. Automjetet duhet te jene ne pronesi te ketij personi ose autoriteti, ose ne perdorim me kontrate qiraje ose leasing. Mjetet motorike duhet te drejtohen nga punonjes te transportuesit vendas dhe mjetet duhet te jene ne pronesi te transportuesit vendas ose te marra me qira pa shofer sipas kushteve per transportin rrugor.",
+      },
+      {
+        prompt: "Qfare eshte linja e transportit te udhetarve?",
+        answer:
+          "Transporti i rregullt i udhetareve eshte metode transporti ku pasagjeret hyjne dhe dalin sipas orarit te udhetimit ne te gjitha stacionet e autobuseve, stacionet kryesore dhe ndalesat e percaktuara me orar.",
+      },
+      {
+        prompt: "Qfare eshte transporti i perkohshem i udhetarve?",
+        answer:
+          "Transporti i rastesishem i udhetareve ne transportin rrugor eshte transporti i nje grupi te paracaktuar udhetaresh, te mbledhur me iniciativen e klientit ose te vete transportuesit, i cili kryhet sipas vertetimit te transportit te rastit. Nuk duhet te permbaje elemente te perseritura te transportit te planifikuar ose te vecante, si itinerari, koha e nisjes dhe mberritjes, si dhe vendi i hipjes dhe zbarkimit.",
+      },
+      {
+        prompt: "Pershkruaj karakteristikat themelore te transportit te pasagjereve me udhetime alternative ne transportin rrugor nderkombetar.",
+        answer:
+          "Transporti i kembyeshem i udhetareve ne transportin rrugor nderkombetar eshte transporti i grupeve te udhetareve te mbledhur me pare, ne intervale te caktuara kohore, ne te dy drejtimet nga nje pike e vetme nisjeje ne nje pike te vetme mberritjeje. Grupi duhet te udhetoje ne te dy drejtimet ne te njejten perberje. Cdo grup transportohet perseri ne vendin e nisjes nga i njejti transportues ne udhetimin pasues. Transporti i pare ne kthim dhe transporti i fundit ne nisje kryhet me mjet bosh.",
+      },
+      {
+        prompt: "Cilat kushte duhet te plotesohen nga shoferi per transportimin e femijeve me autobus?",
+        answer:
+          "Drejtuesit qe transportojne grup femijesh duhet te kene patente shofer per mjetin perkates per te pakten tre vjet dhe te kene drejtuar profesionalisht autobusin e kategorise perkatese D1 ose D per te pakten nje vit. Nese kane me pak se nje vit ne kategorine D, mund te transportojne femije nese me pare kane drejtuar profesionalisht mjete te kategorise C per te pakten dy vjet. Per D1 me me pak se nje vit, mund te transportojne grup femijesh ne autobus deri 16 ulese nese me pare kane drejtuar profesionalisht kategorine B per te pakten dy vjet.",
+      },
+      {
+        prompt: "Qfare rregullon marreveshja nderkombetare per transporte te perkohshme INTERBUS?",
+        answer:
+          "Marreveshja shume paleshe INTERBUS rregullon fushen e transportit publik te rastit, te cilen Bashkimi Evropian e ka nenshkruar me vendet e treta. Qellimi kryesor eshte te pershpejtoje zhvillimin e transportit nderkombetar ne Evrope, te lehtesoje organizimin dhe funksionimin e transportit te rastit dhe te pershpejtoje turizmin dhe shkembimin kulturor midis vendeve.",
+      },
+    ],
+    partThree: {
+      summary:
+        "Ne kete pjese te provimit do te shqyrtoni me detyre nje proces te caktuar transporti. Tek pyetje qe kane te bejne me studimin e rastit te transportit, pergjigjuni konkretisht dhe merrni parasysh udhezimet per zgjidhje.",
+      subquestions: [
+        {
+          prompt: "Pershkruani me detaje dokumentin ne foto me poshte.",
+          image: {
+            src: "assets/potniska-spremnica.png",
+            alt: "Potniska spremnica per transport nderkombetar te udhetareve.",
+          },
+          answer:
+            "Lloji i dokumentit: dokumenti i udhetimit ne komunitet. Perdoret ne territorin e vendeve te Komunitetit Evropian. Plotesohet para fillimit te transportit. Duhet te plotesohet ne dy kopje ne gjuhen sllovene. Nje kopje eshte ne automjet gjate transportit te pasagjereve, ndersa kopja tjeter mbetet ne seline e kompanise.",
+        },
+      ],
+    },
+  },
+};
+
 const makeMultipleChoiceQuestions = (category, testNumber) => {
   const realTest = realTests[category]?.[testNumber];
   if (realTest?.partOne) {
@@ -2179,6 +2338,13 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
   answerReveal.className = "answer-reveal";
   answerReveal.textContent = question.answer;
 
+  const media = question.image ? document.createElement("img") : null;
+  if (media) {
+    media.className = "question-image";
+    media.src = question.image.src;
+    media.alt = question.image.alt || "";
+  }
+
   toggleButton.addEventListener("click", () => {
     answerReveal.classList.toggle("is-visible");
     toggleButton.textContent = answerReveal.classList.contains("is-visible")
@@ -2192,7 +2358,11 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
   });
 
   actionRow.append(toggleButton, resetButton);
-  wrapper.append(title, textarea, actionRow, answerReveal);
+  wrapper.append(title);
+  if (media) {
+    wrapper.appendChild(media);
+  }
+  wrapper.append(textarea, actionRow, answerReveal);
   card.appendChild(wrapper);
   return card;
 };
@@ -2218,7 +2388,7 @@ const renderTestContent = () => {
 
   const partOne = createSectionCard(
     "Pjesa 1: Pyetje me alternativa",
-    "Zgjidh nje alternative. Nese eshte e sakte shfaqet me ngjyre te gjelber, nese eshte gabim shfaqet me te kuqe dhe mund ta permiresosh menjehere."
+    "Zgjidh nje alternative. Secila pyetje vlen 1 pike. Nese eshte e sakte shfaqet me ngjyre te gjelber, nese eshte gabim shfaqet me te kuqe dhe mund ta permiresosh menjehere."
   );
   partOne.classList.add("section-card--multiple-choice");
   test.partOne.forEach((question, index) => {
@@ -2258,7 +2428,7 @@ const renderHeader = () => {
   testTitle.textContent = test.name;
   testMeta.innerHTML = "";
   testMeta.append(
-    createMetaPill(`${test.partOne.length} pyetje me alternativa`),
+    createMetaPill(`${test.partOne.length} pyetje me alternativa nga 1 pike`),
     createMetaPill(`${test.partTwo.length} pyetje me shkrim`),
     createMetaPill(`1 detyre me ${test.partThree.subquestions.length} nenpyetje`)
   );
