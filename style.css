@@ -299,6 +299,7 @@ h3 {
 .sidebar,
 .content {
   border-radius: 30px;
+  min-width: 0;
 }
 
 .sidebar {
@@ -378,11 +379,15 @@ h3 {
 .test-scroll {
   display: grid;
   gap: 20px;
+  min-width: 0;
 }
 
 .section-card,
 .question-card {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
   border-radius: 26px;
   border: none;
   background: var(--surface-strong);
@@ -427,6 +432,8 @@ h3 {
 .subquestion-text {
   margin: 0;
   line-height: 1.7;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .question-text {
@@ -465,12 +472,15 @@ h3 {
 
 .answer-option {
   width: 100%;
+  max-width: 100%;
   text-align: left;
   padding: 15px 17px;
   border-radius: 18px;
   border: none;
   background: white;
   cursor: pointer;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .answer-option span {
@@ -505,11 +515,25 @@ h3 {
 .write-answer {
   display: grid;
   gap: 12px;
+  min-width: 0;
 }
 
 .text-answer {
+  width: 100%;
+  max-width: 100%;
   min-height: 128px;
   resize: vertical;
+}
+
+.question-image {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  max-height: 760px;
+  object-fit: contain;
+  margin: 2px 0 6px;
+  border-radius: 18px;
+  background: #eef8f8;
 }
 
 .action-row {
