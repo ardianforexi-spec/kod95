@@ -2098,7 +2098,8 @@ realTests["D-PJESSHME"] = {
             src: "assets/potniska-spremnica.png",
             alt: "Potniska spremnica per transport nderkombetar te udhetareve.",
           },
-          
+          answer:
+            "Dokumenti ne foto eshte dokument udhetimi ne komunitet per transport nderkombetar te udhetareve. Plotesohet para fillimit te transportit, ne dy kopje: njera qendron ne automjet dhe tjetra ne seline e kompanise.",
         },
         {
           prompt: "Lloji i dokumentit?",
@@ -2287,22 +2288,28 @@ const stopSpeaking = () => {
   }
 };
 
-const speakText = async (text, onEnd) => {
+const speakText = async (text, onEnd, onError, onStart) => {
   stopSpeaking();
   authStatus.textContent = "";
 
   try {
+    const cleanText = String(text || "").trim();
+    if (!cleanText) {
+      throw new Error("Nuk ka tekst per ta lexuar.");
+    }
+
     const response = await fetch("/api/tts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text: cleanText }),
     });
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      throw new Error(error.message || "Nuk u krijua audio.");
+      const details = error.details ? ` ${error.details}` : "";
+      throw new Error(`${error.message || "Nuk u krijua audio."}${details}`);
     }
 
     const audioBlob = await response.blob();
@@ -2324,8 +2331,10 @@ const speakText = async (text, onEnd) => {
     });
 
     await audio.play();
+    onStart();
   } catch (error) {
     authStatus.textContent = error.message;
+    onError(error.message);
     onEnd();
   }
 };
@@ -2418,6 +2427,9 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
   answerReveal.className = "answer-reveal";
   answerReveal.textContent = question.answer;
 
+  const audioStatus = document.createElement("p");
+  audioStatus.className = "audio-status";
+
   const media = question.image ? document.createElement("img") : null;
   if (media) {
     media.className = "question-image";
@@ -2433,20 +2445,37 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
     if (!isVisible) {
       stopSpeaking();
       listenButton.textContent = "Degjo";
+      audioStatus.textContent = "";
     }
   });
 
   listenButton.addEventListener("click", () => {
-    if (window.speechSynthesis?.speaking) {
+    if (currentAudio) {
       stopSpeaking();
       listenButton.textContent = "Degjo";
+      audioStatus.textContent = "";
       return;
     }
 
-    listenButton.textContent = "Ndalo";
-    speakText(question.answer, () => {
-      listenButton.textContent = "Degjo";
-    });
+    audioStatus.textContent = "Duke pergatitur zerin...";
+    listenButton.textContent = "Duke pergatitur...";
+    listenButton.disabled = true;
+
+    speakText(
+      question.answer,
+      () => {
+        listenButton.textContent = "Degjo";
+        listenButton.disabled = !answerReveal.classList.contains("is-visible");
+      },
+      (message) => {
+        audioStatus.textContent = message;
+      },
+      () => {
+        audioStatus.textContent = "";
+        listenButton.textContent = "Ndalo";
+        listenButton.disabled = false;
+      }
+    );
   });
 
   resetButton.addEventListener("click", () => {
@@ -2459,7 +2488,7 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
   if (media) {
     wrapper.appendChild(media);
   }
-  wrapper.append(textarea, actionRow, answerReveal);
+  wrapper.append(textarea, actionRow, audioStatus, answerReveal);
   card.appendChild(wrapper);
   return card;
 };
