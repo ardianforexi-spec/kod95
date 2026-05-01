@@ -2277,68 +2277,6 @@ const getAnswerState = (questionId, correctIndex) => {
   return selectedIndex === correctIndex ? "correct" : "wrong";
 };
 
-let currentAudio = null;
-
-const stopSpeaking = () => {
-  if (currentAudio) {
-    currentAudio.audio.pause();
-    currentAudio.audio.currentTime = 0;
-    URL.revokeObjectURL(currentAudio.url);
-    currentAudio = null;
-  }
-};
-
-const speakText = async (text, onEnd, onError, onStart) => {
-  stopSpeaking();
-  authStatus.textContent = "";
-
-  try {
-    const cleanText = String(text || "").trim();
-    if (!cleanText) {
-      throw new Error("Nuk ka tekst per ta lexuar.");
-    }
-
-    const response = await fetch("/api/tts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: cleanText }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      const details = error.details ? ` ${error.details}` : "";
-      throw new Error(`${error.message || "Nuk u krijua audio."}${details}`);
-    }
-
-    const audioBlob = await response.blob();
-    const url = URL.createObjectURL(audioBlob);
-    const audio = new Audio(url);
-    currentAudio = { audio, url };
-
-    audio.addEventListener("ended", () => {
-      URL.revokeObjectURL(url);
-      currentAudio = null;
-      onEnd();
-    });
-
-    audio.addEventListener("error", () => {
-      URL.revokeObjectURL(url);
-      currentAudio = null;
-      authStatus.textContent = "Audio nuk mundi te luhet ne kete pajisje.";
-      onEnd();
-    });
-
-    await audio.play();
-    onStart();
-  } catch (error) {
-    authStatus.textContent = error.message;
-    onError(error.message);
-    onEnd();
-  }
-};
-
 const createMultipleChoiceCard = (question, index) => {
   const card = document.createElement("article");
   card.className = "question-card";
@@ -2412,12 +2350,6 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
   toggleButton.className = "action-btn";
   toggleButton.textContent = "Shiko pergjigjen";
 
-  const listenButton = document.createElement("button");
-  listenButton.type = "button";
-  listenButton.className = "action-btn action-btn--listen";
-  listenButton.textContent = "Degjo";
-  listenButton.disabled = true;
-
   const resetButton = document.createElement("button");
   resetButton.type = "button";
   resetButton.className = "action-btn action-btn--secondary";
@@ -2426,9 +2358,6 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
   const answerReveal = document.createElement("div");
   answerReveal.className = "answer-reveal";
   answerReveal.textContent = question.answer;
-
-  const audioStatus = document.createElement("p");
-  audioStatus.className = "audio-status";
 
   const media = question.image ? document.createElement("img") : null;
   if (media) {
@@ -2441,41 +2370,6 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
     answerReveal.classList.toggle("is-visible");
     const isVisible = answerReveal.classList.contains("is-visible");
     toggleButton.textContent = isVisible ? "Fshih pergjigjen" : "Shiko pergjigjen";
-    listenButton.disabled = !isVisible;
-    if (!isVisible) {
-      stopSpeaking();
-      listenButton.textContent = "Degjo";
-      audioStatus.textContent = "";
-    }
-  });
-
-  listenButton.addEventListener("click", () => {
-    if (currentAudio) {
-      stopSpeaking();
-      listenButton.textContent = "Degjo";
-      audioStatus.textContent = "";
-      return;
-    }
-
-    audioStatus.textContent = "Duke pergatitur zerin...";
-    listenButton.textContent = "Duke pergatitur...";
-    listenButton.disabled = true;
-
-    speakText(
-      question.answer,
-      () => {
-        listenButton.textContent = "Degjo";
-        listenButton.disabled = !answerReveal.classList.contains("is-visible");
-      },
-      (message) => {
-        audioStatus.textContent = message;
-      },
-      () => {
-        audioStatus.textContent = "";
-        listenButton.textContent = "Ndalo";
-        listenButton.disabled = false;
-      }
-    );
   });
 
   resetButton.addEventListener("click", () => {
@@ -2483,12 +2377,12 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
     textarea.value = "";
   });
 
-  actionRow.append(toggleButton, listenButton, resetButton);
+  actionRow.append(toggleButton, resetButton);
   wrapper.append(title);
   if (media) {
     wrapper.appendChild(media);
   }
-  wrapper.append(textarea, actionRow, audioStatus, answerReveal);
+  wrapper.append(textarea, actionRow, answerReveal);
   card.appendChild(wrapper);
   return card;
 };
