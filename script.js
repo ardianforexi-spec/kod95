@@ -2276,6 +2276,29 @@ const getAnswerState = (questionId, correctIndex) => {
   return selectedIndex === correctIndex ? "correct" : "wrong";
 };
 
+const stopSpeaking = () => {
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+};
+
+const speakText = (text, onEnd) => {
+  if (!("speechSynthesis" in window)) {
+    authStatus.textContent = "Browseri yt nuk e perkrah leximin me ze.";
+    return;
+  }
+
+  stopSpeaking();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "sq-AL";
+  utterance.rate = 0.95;
+  utterance.pitch = 1;
+  utterance.onend = onEnd;
+  utterance.onerror = onEnd;
+  window.speechSynthesis.speak(utterance);
+};
+
 const createMultipleChoiceCard = (question, index) => {
   const card = document.createElement("article");
   card.className = "question-card";
@@ -2349,6 +2372,12 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
   toggleButton.className = "action-btn";
   toggleButton.textContent = "Shiko pergjigjen";
 
+  const listenButton = document.createElement("button");
+  listenButton.type = "button";
+  listenButton.className = "action-btn action-btn--listen";
+  listenButton.textContent = "Degjo";
+  listenButton.disabled = true;
+
   const resetButton = document.createElement("button");
   resetButton.type = "button";
   resetButton.className = "action-btn action-btn--secondary";
@@ -2367,9 +2396,26 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
 
   toggleButton.addEventListener("click", () => {
     answerReveal.classList.toggle("is-visible");
-    toggleButton.textContent = answerReveal.classList.contains("is-visible")
-      ? "Fshih pergjigjen"
-      : "Shiko pergjigjen";
+    const isVisible = answerReveal.classList.contains("is-visible");
+    toggleButton.textContent = isVisible ? "Fshih pergjigjen" : "Shiko pergjigjen";
+    listenButton.disabled = !isVisible;
+    if (!isVisible) {
+      stopSpeaking();
+      listenButton.textContent = "Degjo";
+    }
+  });
+
+  listenButton.addEventListener("click", () => {
+    if (window.speechSynthesis?.speaking) {
+      stopSpeaking();
+      listenButton.textContent = "Degjo";
+      return;
+    }
+
+    listenButton.textContent = "Ndalo";
+    speakText(question.answer, () => {
+      listenButton.textContent = "Degjo";
+    });
   });
 
   resetButton.addEventListener("click", () => {
@@ -2377,7 +2423,7 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
     textarea.value = "";
   });
 
-  actionRow.append(toggleButton, resetButton);
+  actionRow.append(toggleButton, listenButton, resetButton);
   wrapper.append(title);
   if (media) {
     wrapper.appendChild(media);
