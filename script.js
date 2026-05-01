@@ -2093,7 +2093,7 @@ realTests["D-PJESSHME"] = {
         "Ne kete pjese te provimit do te shqyrtoni me detyre nje proces te caktuar transporti. Tek pyetje qe kane te bejne me studimin e rastit te transportit, pergjigjuni konkretisht dhe merrni parasysh udhezimet per zgjidhje.",
       subquestions: [
         {
-          prompt: "Lloji i dokumentit?",
+          prompt: "Pershkruani me detaje dokumentin ne foto me poshte!",
           image: {
             src: "assets/potniska-spremnica.png",
             alt: "Potniska spremnica per transport nderkombetar te udhetareve.",
