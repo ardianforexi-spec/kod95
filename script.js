@@ -2093,13 +2093,29 @@ realTests["D-PJESSHME"] = {
         "Ne kete pjese te provimit do te shqyrtoni me detyre nje proces te caktuar transporti. Tek pyetje qe kane te bejne me studimin e rastit te transportit, pergjigjuni konkretisht dhe merrni parasysh udhezimet per zgjidhje.",
       subquestions: [
         {
-          prompt: "Pershkruani me detaje dokumentin ne foto me poshte.",
+          prompt: "Lloji i dokumentit?",
           image: {
             src: "assets/potniska-spremnica.png",
             alt: "Potniska spremnica per transport nderkombetar te udhetareve.",
           },
+          answer: "Dokumenti i udhetimit ne komunitet.",
+        },
+        {
+          prompt: "Ne teritorin e te cilave shtete perdoret ky lloj i dokumentit?",
+          answer: "Ne territorin e vendeve te Komunitetit Evropian.",
+        },
+        {
+          prompt: "Kur plotesohet?",
+          answer: "Perfundohen/plotesohen para fillimit te transportit.",
+        },
+        {
+          prompt: "Ne sa kopje plotesohet ky dokument?",
+          answer: "Duhet te plotesohet ne dy kopje ne gjuhen sllovene.",
+        },
+        {
+          prompt: "Ku gjenden kopjet e veqanta te dokumentit?",
           answer:
-            "Lloji i dokumentit: dokumenti i udhetimit ne komunitet. Perdoret ne territorin e vendeve te Komunitetit Evropian. Plotesohet para fillimit te transportit. Duhet te plotesohet ne dy kopje ne gjuhen sllovene. Nje kopje eshte ne automjet gjate transportit te pasagjereve, ndersa kopja tjeter mbetet ne seline e kompanise.",
+            "Nje kopje eshte ne automjet gjate transportit te pasagjereve, kopja tjeter mbetet ne seline e kompanise.",
         },
       ],
     },
