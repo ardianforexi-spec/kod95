@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="sq">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KOD95 Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="auth-shell" id="auth-shell">
+      <section class="auth-card auth-card--intro">
+        <p class="eyebrow">KOD95 Learning Suite</p>
+        <h1>Platforme premium per ushtrimet e kategorive C dhe D</h1>
+        <p class="auth-copy">
+          Hyr ose regjistrohu, zgjedh kategorine tende, dhe sistemi ta shfaq
+          vetem rrugen e duhur te ushtrimeve.
+        </p>
+        <div class="auth-highlights">
+          <div class="highlight-chip">Teste me 3 pjese</div>
+          <div class="highlight-chip">Pergjigje me feedback</div>
+          <div class="highlight-chip">Fokus vetem ne kategorine tende</div>
+        </div>
+      </section>
+
+      <section class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab is-active" id="login-tab" type="button">Login</button>
+          <button class="auth-tab" id="register-tab" type="button">Regjistrohu</button>
+        </div>
+
+        <form class="auth-form" id="login-form">
+          <label class="field">
+            <span>Email</span>
+            <input type="email" id="login-email" placeholder="shkruaj emailin" required />
+          </label>
+          <label class="field">
+            <span>Fjalekalimi</span>
+            <input type="password" id="login-password" placeholder="shkruaj fjalekalimin" required />
+          </label>
+          <button class="primary-btn" type="submit">Hyr ne platforme</button>
+        </form>
+
+        <form class="auth-form is-hidden" id="register-form">
+          <label class="field">
+            <span>Emri i plote</span>
+            <input type="text" id="register-name" placeholder="p.sh. Ardian Krasniqi" required />
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input type="email" id="register-email" placeholder="shkruaj emailin" required />
+          </label>
+          <label class="field">
+            <span>Fjalekalimi</span>
+            <input type="password" id="register-password" placeholder="krijo fjalekalim" required />
+          </label>
+          <label class="field">
+            <span>Zgjedh kategorine</span>
+            <select id="register-category" required>
+              <option value="C">Kategoria C</option>
+              <option value="D">Kategoria D</option>
+              <option value="D-PJESSHME">Kategoria D e pjesshme</option>
+            </select>
+          </label>
+          <button class="primary-btn" type="submit">Krijo account</button>
+        </form>
+
+        <p class="auth-status" id="auth-status"></p>
+      </section>
+    </div>
+
+    <div class="page-shell is-hidden" id="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">KOD95 Premium</p>
+          <h1 class="topbar__title">Teste interaktive per pergatitje profesionale</h1>
+        </div>
+        <div class="topbar__actions">
+          <div class="profile-pill">
+            <span class="profile-pill__name" id="profile-name"></span>
+            <span class="profile-pill__category" id="profile-category"></span>
+          </div>
+          <button class="ghost-btn" id="logout-btn" type="button">Dil</button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside class="sidebar">
+          <div class="sidebar__panel">
+            <p class="sidebar__label">Kategoria aktive</p>
+            <div class="category-badge" id="active-category-badge"></div>
+            <p class="sidebar__description" id="active-category-description"></p>
+          </div>
+
+          <div class="sidebar__panel">
+            <p class="sidebar__label">Testet e tua</p>
+            <div class="test-list" id="test-list"></div>
+          </div>
+        </aside>
+
+        <section class="content">
+          <div class="content__hero">
+            <div>
+              <p class="content__eyebrow" id="test-category-label"></p>
+              <h2 id="test-title"></h2>
+              <p class="content__subtitle">
+                Testi shfaqet i plote ne nje scroll: pjesa me alternativa,
+                pjesa me pergjigje me shkrim, dhe detyra finale.
+              </p>
+            </div>
+            <div class="content__meta" id="test-meta"></div>
+          </div>
+
+          <div class="test-scroll" id="test-container"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
