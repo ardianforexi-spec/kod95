@@ -2127,6 +2127,158 @@ realTests["D-PJESSHME"] = {
   },
 };
 
+realTests["D-PJESSHME"][2] = {
+  name: "Testi 2",
+  partOne: [
+    {
+      prompt:
+        "Si duhet te rregulloje shoferi ndihmesit pedagoge qe shoqerojne transportin e femijeve ne automjet?",
+      options: [
+        "Asistentet e mesimdhenies duhet te ulen ne sediljet e perparme.",
+        "Nje pedagog shoqerues duhet te ulet perpara dhe dy ne pjesen e pasme te mjetit.",
+        "Nese i shoqerojne me shume se nje pedagog, ato duhet te shperndahen mes femijeve ne automjet: para, mbrapa dhe ne mes.",
+        "Nese jane disa pedagoge qe i shoqerojne, ata duhet te sistemohen ne automjet sipas moshes se femijeve.",
+      ],
+      correctIndex: 2,
+    },
+    {
+      prompt: "Cila eshte mosha minimale e nje shoqeruesi pedagogjik kur transporton nje grup femijesh?",
+      options: ["18 vjec.", "21 vjec.", "16 vjec.", "25 vjet."],
+      correctIndex: 1,
+    },
+    {
+      prompt:
+        "Sa eshte kufiri i shpejtesise per autobuset ne rruget jashte vendbanimit, ne te cilet udhetaret qendrojne gjate vozitjes?",
+      options: ["80 km/h.", "70 km/h.", "60 km/h.", "50 km/h."],
+      correctIndex: 2,
+    },
+    {
+      prompt:
+        "Cili eshte kufiri i shpejtesise per mjetet motorike qe transportojne udhetare ne stenda ose sedilje te ngjitura ne pjesen e jashtme te mjetit dhe per trenat turistike rrugore?",
+      options: ["50 km/h.", "40 km/h.", "30 km/h.", "20 km/h."],
+      correctIndex: 3,
+    },
+    {
+      prompt:
+        "Ju kryeni transport te kohepaskohshem midis Romes dhe Dubrovnikut. Cilin dokument kontrolli transporti duhet te keni ne autobus?",
+      options: [
+        "Porosia e udhetimit.",
+        "Kontrollo fletoren CEMT.",
+        "Dokumenti i udhetimit ne BE.",
+        "Karta e udhetimit INTERBUS.",
+      ],
+      correctIndex: 2,
+    },
+    {
+      prompt: "Ju ofroni nje sherbim te vecante autobusi midis Udine dhe Trieste. Si do ta plotesoni pasaporten?",
+      options: [
+        "Ashtu si transporti me udhetime te alternuara.",
+        "Si nje liber kontrolli CEMT.",
+        "Ne bileten e pasagjerit do te shenoj transportin atje me mjet te plote, por me mjet te zbrazet mbrapa.",
+        "Ne forme te nje raporti mujor.",
+      ],
+      correctIndex: 3,
+    },
+    {
+      prompt:
+        "Ku mund te mbikeqyre transportin rrugor nje inspektor trafiku? Zgjidhni deklaraten me te sakte.",
+      options: [
+        "Ne seline e transportuesit.",
+        "Gjate transportit.",
+        "Ne seline e transportuesit dhe gjate transportit.",
+        "Ne seline e transportuesit, gjate rrjedhes se transportit dhe kur perfundon nje kundershtim per transportin.",
+      ],
+      correctIndex: 2,
+    },
+    {
+      prompt: "Cfare duhet t'i kushtoni vemendje te vecante ne procedurat doganore?",
+      options: [
+        "Te jesh i sjellshem me autoritetet doganore.",
+        "Per te gjetur degen e duhur doganore, d.m.th. zyren doganore.",
+        "Qe doganieri te na ktheje te gjitha dokumentet dhe t'i vulose ne perputhje me rrethanat.",
+        "Le te bejme procedurat sa me shpejt te jete e mundur.",
+      ],
+      correctIndex: 2,
+    },
+    {
+      prompt: "A lejon leja e hyrjes per nje autobus bosh kabotazh?",
+      options: ["Jo.", "Po.", "Ndonjehere.", "Nese kjo eshte dakorduar."],
+      correctIndex: 0,
+    },
+    {
+      prompt:
+        "Nga pikepamja e pergjegjesise se transportuesit, cfare duhet te beje shoferi kur pranon bagazhin e dorezuar per transport?",
+      options: [
+        "Per te percaktuar madhesine dhe peshen e bagazhit.",
+        "Per te percaktuar gjeresine e tij.",
+        "Per t'i leshuar pasagjerit nje fature per marrjen e bagazhit.",
+        "Te kontrollon nese informacioni per mallrat korrespondon me gjendjen aktuale.",
+      ],
+      correctIndex: 3,
+    },
+  ],
+  partTwo: [
+    {
+      prompt:
+        "Kur, gjate kryerjes se nje sherbimi te rregullt te vecante, mund te merrni edhe udhetare te rastesishem?",
+      answer:
+        "Nese klienti dhe ofruesi i transportit bien dakord ne kontrate, dhe nese ka kapacitet te mjaftueshem ne mjet. Per te marre pasagjere te rastesishem, transportuesi duhet te marre leje nga autoriteti PPP.",
+    },
+    {
+      prompt:
+        "Pershkruani menyren e plotesimit te pasaportes se udhetarit: kush e ploteson, kur plotesohet, cila kopje duhet te jete ne automjet, kush e miraton dhe kush eshte pergjegjes per saktesine?",
+      answer:
+        "Para fillimit te cdo transporti periodik te udhetareve, transportuesi duhet te plotesoje formularin e pasagjereve ne dy kopje. Kopja e pare duhet te jete ne automjet gjate gjithe transportit dhe shoferi duhet ta tregoje me kerkese te autoriteteve te kontrollit. Kopja e dyte dhe libreza mbahen ne seline e kompanise. Autoritetet kufitare e vulosin pasaporten e pasagjerit ne hyrje dhe dalje nga vendi. Transportuesi mund ta pergatise listen e pasagjereve ne flete te vecante, duke e bashkangjitur me pasaporten. Lista dhe karta duhet te vulosen ose nenshkruhen kur kerkohet. Kur automjeti eshte bosh gjate rruges per atje, lista mund te plotesohet kur hipin pasagjeret. Transportuesi eshte pergjegjes per plotesimin e sakte dhe formulari duhet te plotesohet me shkronja bllok te pashlyeshme.",
+    },
+    {
+      prompt:
+        "Cilat mjete transporti perdoren per kryerjen e formave te vecanta te transportit ne transportin e udhetareve dhe kush i percakton kushtet?",
+      answer:
+        "Forma te vecanta te transportit jane, per shembull, transporti i udhetareve me rimorkio te pershtatura te terhequra nga traktor, treni turistik rrugor ose mjete te tjera rrugore te pershtatura per udhetare. Bashkesia vendore vetqeverisese percakton organizimin, menyren dhe kushtet e kryerjes se ketyre transporteve.",
+    },
+    {
+      prompt: "Ne cilat raste transporti i grupeve te femijeve mund te behet me autobus urban?",
+      answer:
+        "Autobusi urban mund te perdoret gjate transportit te nje grupi femijesh ne sherbime te rregullta, te rastit dhe te vecanta, ne distance jo me shume se 10 kilometra nga vendbanimi ku ka filluar sherbimi.",
+    },
+    {
+      prompt: "Cfare merr persiper transportuesi duke lidhur kontrate me nje udhetar ne transportin publik me orar?",
+      answer:
+        "Transportuesi merr persiper ta transportoje pasagjerin sipas kushteve te publikuara te transportit, deri ne destinacion, ne menyre te sigurt, ne kohe, me mjetin e percaktuar ne kontrate dhe ne kushte komode e higjienike qe jane te zakonshme ne trafikun rrugor.",
+    },
+    {
+      prompt:
+        "Pershkruani karakteristikat themelore te transportit te udhetareve me udhetime te alternuara ne transportin rrugor nderkombetar.",
+      answer:
+        "Transporti i kembyeshem i udhetareve ne transportin rrugor nderkombetar eshte transporti i grupeve te udhetareve te mbledhur me pare, ne intervale te caktuara kohore, ne te dy drejtimet nga nje pike e vetme nisjeje ne nje pike te vetme mberritjeje. Grupi duhet te udhetoje ne te dy drejtimet ne te njejten perberje, si deshmohet nga fletet e pasagjereve. Cdo grup transportohet perseri ne vendin e nisjes nga i njejti transportues ne udhetimin pasues. Transporti i pare ne kthim dhe transporti i fundit ne nisje kryhen me mjet bosh.",
+    },
+  ],
+  partThree: {
+    summary:
+      "Jeni shofer per transportuesin BUSKO doo, Gornja dolina 2, Kranj. Sot filloni udhetimin ne Koper me autobus bosh. Klienti eshte Turizem doo. Shkoni ne Venedik ku merrni 35 turiste amerikane ne aeroport dhe i coni ne vende te ndryshme ne veri te Italise: 15 turiste zbresin ne Verona, 12 ne Bolzano dhe te tjeret ne Trieste. Autobusi ka 48 vende te regjistruara per udhetare. Distancat jane: Koper-Venedik 190 km, Venedik-Verona 120 km, Verona-Bolzano 70 km, Bolzano-Trieste 210 km. Numri i regjistrimit te automjetit eshte LJ 400-5C.",
+    subquestions: [
+      {
+        prompt: "Cfare lloj transporti nderkombetar udhetaresh do te beni?",
+        answer: "Transport i rastit ne forme kabotazhi.",
+      },
+      {
+        prompt: "Si do ta shenoni mjetin per kryerjen e ketij transporti?",
+        answer:
+          "Mjeti shenohet si autobus qe perdoret per transport te herepashershem te turisteve, ekskursione e te ngjashme. Duhet te kete tabele me mbishkrimin TRANSPORT RASTI, me madhesi se paku 500 mm x 140 mm. Mbishkrimi mund te jete edhe ne ekran elektronik.",
+      },
+      {
+        prompt: "Plotesoni formularin e udhetareve per transportin e pershkruar.",
+        image: {
+          src: "assets/potniska-spremnica-kabotazh.png",
+          alt: "Formular i plotesuar i udhetareve per transport kabotazhi.",
+        },
+        answer:
+          "Formulari duhet te plotesohet me te dhenat e transportuesit BUSKO doo, selia Gornja dolina 2, Kranj, regjistrimi i autobusit LJ 400-5C, klienti Turizem doo, lloji i transportit kabotazh/transport i rastit, vendet e nisjes dhe destinacionet ne Itali, numri i udhetareve dhe kilometrat per secilin segment: Koper-Venedik 190 km, Venedik-Verona 120 km, Verona-Bolzano 70 km dhe Bolzano-Trieste 210 km.",
+      },
+    ],
+  },
+};
+
 const makeMultipleChoiceQuestions = (category, testNumber) => {
   const realTest = realTests[category]?.[testNumber];
   if (realTest?.partOne) {
