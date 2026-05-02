@@ -116,6 +116,34 @@
             <div class="content__meta" id="test-meta"></div>
           </div>
 
+          <div class="study-tools">
+            <div class="progress-panel" aria-live="polite">
+              <div class="progress-panel__top">
+                <span id="progress-label">0% e perfunduar</span>
+                <span id="progress-count">0/0</span>
+              </div>
+              <div class="progress-track">
+                <span id="progress-bar"></span>
+              </div>
+            </div>
+
+            <label class="search-field" for="question-search">
+              <span>Kerko pyetje</span>
+              <input id="question-search" type="search" placeholder="p.sh. tahograf, CMR, frena..." />
+            </label>
+
+            <label class="filter-field" for="question-filter">
+              <span>Shfaq</span>
+              <select id="question-filter">
+                <option value="all">Te gjitha</option>
+                <option value="unanswered">Pa pergjigje</option>
+                <option value="wrong">Gabim</option>
+              </select>
+            </label>
+
+            <button class="clear-test-btn" id="clear-test-btn" type="button">Pastro testin</button>
+          </div>
+
           <div class="test-scroll" id="test-container"></div>
         </section>
       </main>
