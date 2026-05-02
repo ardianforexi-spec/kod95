@@ -2402,20 +2402,49 @@ const questionSearch = document.getElementById("question-search");
 const questionFilter = document.getElementById("question-filter");
 const clearTestButton = document.getElementById("clear-test-btn");
 
-const readUsers = () => JSON.parse(localStorage.getItem(storageKeys.users) || "[]");
-const writeUsers = (users) => localStorage.setItem(storageKeys.users, JSON.stringify(users));
-const saveSession = (user) => localStorage.setItem(storageKeys.session, JSON.stringify(user));
-const readSession = () => JSON.parse(localStorage.getItem(storageKeys.session) || "null");
+const safeReadJson = (key, fallback) => {
+  try {
+    return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+  } catch (error) {
+    localStorage.removeItem(key);
+    return fallback;
+  }
+};
+
+const normalizeUser = (user) => {
+  if (!user) {
+    return null;
+  }
+
+  const categoryId = categoryConfig[user.categoryId]?.id || categoryConfig[user.category]?.id || "C";
+
+  return {
+    ...user,
+    categoryId,
+  };
+};
+
+const readUsers = () => {
+  const users = safeReadJson(storageKeys.users, []);
+  return (Array.isArray(users) ? users : []).map(normalizeUser).filter(Boolean);
+};
+const writeUsers = (users) =>
+  localStorage.setItem(storageKeys.users, JSON.stringify(users.map(normalizeUser)));
+const saveSession = (user) =>
+  localStorage.setItem(storageKeys.session, JSON.stringify(normalizeUser(user)));
+const readSession = () => normalizeUser(safeReadJson(storageKeys.session, null));
 const clearSession = () => localStorage.removeItem(storageKeys.session);
-const readSavedAnswers = () => JSON.parse(localStorage.getItem(storageKeys.answers) || "{}");
+const readSavedAnswers = () => safeReadJson(storageKeys.answers, {});
 const writeSavedAnswers = (answers) =>
   localStorage.setItem(storageKeys.answers, JSON.stringify(answers));
 
 const getCurrentCategory = () =>
-  appData.categories.find((category) => category.id === state.currentUser.categoryId);
+  appData.categories.find((category) => category.id === state.currentUser.categoryId) ||
+  appData.categories[0];
 
 const getSelectedTest = () =>
-  getCurrentCategory().tests.find((test) => test.id === state.selectedTestId);
+  getCurrentCategory().tests.find((test) => test.id === state.selectedTestId) ||
+  getCurrentCategory().tests[0];
 
 const getAnswerStorageKey = (testId = state.selectedTestId) =>
   `${state.currentUser.email}:${testId}`;
@@ -2486,6 +2515,10 @@ const getProgress = (test) => {
 const renderProgress = () => {
   const test = getSelectedTest();
   const { answered, total, percent } = getProgress(test);
+
+  if (!progressLabel || !progressCount || !progressBar) {
+    return;
+  }
 
   progressLabel.textContent = `${percent}% e perfunduar`;
   progressCount.textContent = `${answered}/${total}`;
@@ -2777,13 +2810,18 @@ const renderApp = () => {
   appShell.classList.remove("is-hidden");
 
   const category = getCurrentCategory();
-  if (!state.selectedTestId) {
+  if (!state.selectedTestId || !category.tests.some((test) => test.id === state.selectedTestId)) {
     state.selectedTestId = category.tests[0].id;
   }
 
   loadAnswers();
-  questionSearch.value = state.questionSearch;
-  questionFilter.value = state.questionFilter;
+  if (questionSearch) {
+    questionSearch.value = state.questionSearch;
+  }
+
+  if (questionFilter) {
+    questionFilter.value = state.questionFilter;
+  }
 
   renderProfile();
   renderTestList();
@@ -2794,21 +2832,27 @@ const renderApp = () => {
 loginTab.addEventListener("click", () => setAuthMode("login"));
 registerTab.addEventListener("click", () => setAuthMode("register"));
 
-questionSearch.addEventListener("input", (event) => {
-  state.questionSearch = event.target.value;
-  renderTestContent();
-});
+if (questionSearch) {
+  questionSearch.addEventListener("input", (event) => {
+    state.questionSearch = event.target.value;
+    renderTestContent();
+  });
+}
 
-questionFilter.addEventListener("change", (event) => {
-  state.questionFilter = event.target.value;
-  renderTestContent();
-});
+if (questionFilter) {
+  questionFilter.addEventListener("change", (event) => {
+    state.questionFilter = event.target.value;
+    renderTestContent();
+  });
+}
 
-clearTestButton.addEventListener("click", () => {
-  state.answers = {};
-  saveAnswers();
-  renderApp();
-});
+if (clearTestButton) {
+  clearTestButton.addEventListener("click", () => {
+    state.answers = {};
+    saveAnswers();
+    renderApp();
+  });
+}
 
 registerForm.addEventListener("submit", (event) => {
   event.preventDefault();
