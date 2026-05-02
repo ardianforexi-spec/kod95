@@ -1,4 +1,6 @@
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
+
+const sql = neon(process.env.DATABASE_URL || process.env.POSTGRES_URL || "");
 
 const sendJson = (response, status, body) =>
   response.status(status).json(body);
@@ -42,7 +44,7 @@ export default async function handler(request, response) {
         LIMIT 1
       `;
 
-      return sendJson(response, 200, { answers: result.rows[0]?.answers || {} });
+      return sendJson(response, 200, { answers: result[0]?.answers || {} });
     }
 
     const answers = request.body?.answers || {};
