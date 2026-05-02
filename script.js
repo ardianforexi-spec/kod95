@@ -2286,7 +2286,7 @@ realTests["D-PJESSHME"][3] = {
     {
       prompt: "Në cilin rast transportuesi nuk lëshon një biletë?",
       options: [
-        "Kada operon me transport publik me orar.",
+        "Gjatë kryerjes së transportit special të linjës.",
         "Kur një pasagjer tregon kartën e aftësisë së kufizuar.",
         "Kada kryen transport me linje speciale.",
         "Ndonjëherë nuk mund të sigurojë një vend të lirë për një pasagjer që transferohet në një fluturim më të shkurtër.",
@@ -2296,7 +2296,7 @@ realTests["D-PJESSHME"][3] = {
     {
       prompt: "Cilat dy udhëtime janë bosh kur kryeni transport me udhëtime të alternuara?",
       options: [
-        "Kodi i parë i kthimit dhe kodi i fundit i nisjes.",
+        "I pari në kthim dhe i fundit në dalje.",
         "Dy kodet e para të nisjes.",
         "Dy kodet e fundit të kthimit.",
         "Kodi i parë i nisjes dhe kodi i fundit i kthimit.",
@@ -2307,7 +2307,7 @@ realTests["D-PJESSHME"][3] = {
       prompt: "Çfarë i jepet pasagjerit të cilit i është konfiskuar bileta?",
       options: [
         "Dënim për një biletë të pavlefshme.",
-        "Vërtetim për heqjen e biletës së drejtimit.",
+        "Certifikatë të tërheqjes së biletës.",
         "Thirrni për një seancë dëgjimore në selinë e transportuesit.",
         "Asgjë.",
       ],
@@ -2317,7 +2317,7 @@ realTests["D-PJESSHME"][3] = {
       prompt: "Cili bagazh është bagazh i kontrolluar?",
       options: [
         "Ai që udhëton me të njëjtin mjet me pasagjerin.",
-        "Ai që transportohet në mënyrë të pavarur nga udhëtimi i pasagjerit.",
+        "Ai që transportohet në mënyrë të pavarur nga udhëtimi i udhëtarit.",
         "Ai që humbet ose dëmtohet gjatë transportit.",
         "Një që nuk humbet apo dëmtohet gjatë transportit.",
       ],
@@ -2329,7 +2329,7 @@ realTests["D-PJESSHME"][3] = {
       options: [
         "Transportuesi.",
         "Stafi i stacionit ose stacionit të autobusit.",
-        "Një udhëtar.",
+        "Udhëtari.",
         "Stafi i vozitjes.",
       ],
       correctIndex: 2,
@@ -2349,7 +2349,8 @@ realTests["D-PJESSHME"][3] = {
       prompt: "Kur duhet shoferi të informojë stacionin më të afërt të autobusit për vonesën?",
       options: [
         "Nëse gjatë udhëtimit krijohen rrethana që shkaktojnë një vonesë më shumë se 15 minuta.",
-        "Nëse gjatë udhëtimit krijohen rrethana që shkaktojnë një vonesë më shumë se 30 minuta.",
+        "Nëse ka rrethana gjatë udhëtimit, për shkak të të cilave do të pritej vonesë prej më shumë se 30
+minuta.",
         "Ai nuk është i detyruar të informojë.",
         "Nëse lindin rrethana gjatë udhëtimit, për shkak të të cilave ai parashikon një vonesë prej më shumë se një ore.",
       ],
@@ -2358,7 +2359,8 @@ realTests["D-PJESSHME"][3] = {
     {
       prompt: "Çfarë është fatura e udhëtarëve?",
       options: [
-        "Dokument shoqërues që zëvendëson lejen për transport të rastit në transportin rrugor ndërkombëtar të udhëtarëve.",
+        "Është dokument shoqërues që zëvendëson lejen për transport të rastit në transportin rrugor
+ndërkombëtar të udhëtarëve.",
         "Urdhër udhëtimi për transport të rastësishëm të mallrave.",
         "Dokument shoqërues që zëvendëson licencën për transportin liner në transportin rrugor ndërkombëtar të udhëtarëve.",
         "Dokument shoqërues që zëvendëson lejen e transportit të pasagjerëve me autotaksi.",
@@ -2381,7 +2383,7 @@ realTests["D-PJESSHME"][3] = {
       options: [
         "Po, gjithsesi.",
         "Jo, në asnjë rrethanë.",
-        "Po, nëse transporti nuk bëhet në kohën e paracaktuar.",
+        "Po, nëse transporti nuk fillon në kohën e paracaktuar.
         "Po, nëse transporti ka filluar në kohë ose ka përfunduar me vonesë për shkak të trafikut të rënduar.",
       ],
       correctIndex: 2,
