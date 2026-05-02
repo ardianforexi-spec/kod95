@@ -2420,6 +2420,10 @@ realTests["D-PJESSHME"][3] = {
     subquestions: [
       {
         prompt: "Plotësoni dokumentin e udhëtimit për 1 javë.",
+        image: {
+          src: "assets/potniska-spremnica.png",
+          alt: "Potniska spremnica per transport nderkombetar te udhetareve.",
+        },
         answer:
           "Dokumenti i udhëtimit plotësohet për transportuesin Zima Tours, Ulica Maršala Tita 17, Jesenice, me autobus KR 673-CR, klient Alpine Fun Sports, relacion Altenmarkt - Flachau, distancë 11 km. Shënohen udhëtimet javore: e hënë 34 fëmijë për në qendrën e skive dhe 28 kthim, e mërkurë 25 për në qendrën e skive dhe 25 kthim, e premte 30 për në qendrën e skive dhe 24 kthim.",
       },
