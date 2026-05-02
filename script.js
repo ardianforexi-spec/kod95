@@ -2280,6 +2280,158 @@ realTests["D-PJESSHME"][2] = {
   },
 };
 
+realTests["D-PJESSHME"][3] = {
+  name: "Testi 3",
+  partOne: [
+    {
+      prompt: "Në cilin rast transportuesi nuk lëshon një biletë?",
+      options: [
+        "Kada operon me transport publik me orar.",
+        "Kur një pasagjer tregon kartën e aftësisë së kufizuar.",
+        "Kada kryen transport me linje speciale.",
+        "Ndonjëherë nuk mund të sigurojë një vend të lirë për një pasagjer që transferohet në një fluturim më të shkurtër.",
+      ],
+      correctIndex: 2,
+    },
+    {
+      prompt: "Cilat dy udhëtime janë bosh kur kryeni transport me udhëtime të alternuara?",
+      options: [
+        "Kodi i parë i kthimit dhe kodi i fundit i nisjes.",
+        "Dy kodet e para të nisjes.",
+        "Dy kodet e fundit të kthimit.",
+        "Kodi i parë i nisjes dhe kodi i fundit i kthimit.",
+      ],
+      correctIndex: 0,
+    },
+    {
+      prompt: "Çfarë i jepet pasagjerit të cilit i është konfiskuar bileta?",
+      options: [
+        "Dënim për një biletë të pavlefshme.",
+        "Vërtetim për heqjen e biletës së drejtimit.",
+        "Thirrni për një seancë dëgjimore në selinë e transportuesit.",
+        "Asgjë.",
+      ],
+      correctIndex: 1,
+    },
+    {
+      prompt: "Cili bagazh është bagazh i kontrolluar?",
+      options: [
+        "Ai që udhëton me të njëjtin mjet me pasagjerin.",
+        "Ai që transportohet në mënyrë të pavarur nga udhëtimi i pasagjerit.",
+        "Ai që humbet ose dëmtohet gjatë transportit.",
+        "Një që nuk humbet apo dëmtohet gjatë transportit.",
+      ],
+      correctIndex: 1,
+    },
+    {
+      prompt:
+        "Kur duhet që pasagjeri të sigurohet që pasagjeri të hipë në autobusin e duhur në stacionin e nisjes ose të ndalojë dhe të zbresë nga autobusi në destinacionin përfundimtar?",
+      options: [
+        "Transportuesi.",
+        "Stafi i stacionit ose stacionit të autobusit.",
+        "Një udhëtar.",
+        "Stafi i vozitjes.",
+      ],
+      correctIndex: 2,
+    },
+    {
+      prompt:
+        "Ku tregohet lloji i transportit, sekuenca e ndalesave të autobusit, koha e mbërritjes, nisjes dhe pushimet për autobusin?",
+      options: [
+        "Në orar.",
+        "Në fletën shoqëruese për pasagjerët.",
+        "Në kushtet e përgjithshme të transportit.",
+        "Në aktin për kontrollin e brendshëm.",
+      ],
+      correctIndex: 0,
+    },
+    {
+      prompt: "Kur duhet shoferi të informojë stacionin më të afërt të autobusit për vonesën?",
+      options: [
+        "Nëse gjatë udhëtimit krijohen rrethana që shkaktojnë një vonesë më shumë se 15 minuta.",
+        "Nëse gjatë udhëtimit krijohen rrethana që shkaktojnë një vonesë më shumë se 30 minuta.",
+        "Ai nuk është i detyruar të informojë.",
+        "Nëse lindin rrethana gjatë udhëtimit, për shkak të të cilave ai parashikon një vonesë prej më shumë se një ore.",
+      ],
+      correctIndex: 1,
+    },
+    {
+      prompt: "Çfarë është fatura e udhëtarëve?",
+      options: [
+        "Dokument shoqërues që zëvendëson lejen për transport të rastit në transportin rrugor ndërkombëtar të udhëtarëve.",
+        "Urdhër udhëtimi për transport të rastësishëm të mallrave.",
+        "Dokument shoqërues që zëvendëson licencën për transportin liner në transportin rrugor ndërkombëtar të udhëtarëve.",
+        "Dokument shoqërues që zëvendëson lejen e transportit të pasagjerëve me autotaksi.",
+      ],
+      correctIndex: 0,
+    },
+    {
+      prompt:
+        "Gjatë kryerjes së një transporti të posaçëm me orar, a duhet shoferi të ketë patentë në mjet nëse merr edhe pasagjerë të rastësishëm?",
+      options: [
+        "Po gjithmone.",
+        "Po, ose vetëm kur kryen transport të rastësishëm.",
+        "Nr.",
+        "Jo, sepse kundërshtimi nuk është konkluduar për kryerjen e trafikut të planifikuar të veçantë.",
+      ],
+      correctIndex: 0,
+    },
+    {
+      prompt: "A mundet pasagjeri të kërkojë rimbursim të shumës së paguar për udhëtimin?",
+      options: [
+        "Po, gjithsesi.",
+        "Jo, në asnjë rrethanë.",
+        "Po, nëse transporti nuk bëhet në kohën e paracaktuar.",
+        "Po, nëse transporti ka filluar në kohë ose ka përfunduar me vonesë për shkak të trafikut të rënduar.",
+      ],
+      correctIndex: 2,
+    },
+  ],
+  partTwo: [
+    {
+      prompt: "Shkruaj fjalet qe mungojne!",
+      answer:
+        "Vendi i autoritetit është vendi ku në bazë të kundërshtimit të transportit përfundon transporti.\nBagazhi i kontrolluar janë sende ose objekte që pasagjeri i dorëzon për transport bazuar në një kundërshtim ndaj transportit të bagazheve.\nKërkesa personale janë pretendime që kanë lindur për shkak të vdekjes, problemeve shëndetësore ose lëndimeve të pasagjerëve.\nTransporti sezonal i udhëtarëve në komunikacionin rrugor është transporti që nuk klasifikohet as si transport publik me orar dhe as si transport i veçantë me orar, dhe ku transportohet një grup udhëtarësh të paracaktuar sipas kushteve të përcaktuara me marrëveshje ndërmjet transportuesit dhe personit që urdhëron transportin.",
+    },
+    {
+      prompt: "Për çfarë angazhohet transportuesi duke lëshuar një biletë?",
+      answer:
+        "Transportuesi angazhohet që vozitja të kryhet sipas orarit, në mënyrë të sigurt, në kohë, me vend për pasagjerin, me autobus të pastër e të rehatshëm, pasi udhëtari paguan për transportin.",
+    },
+    {
+      prompt: "Në cilin rast shoferi ose kontrollori mund të konfiskojë biletën e kohës?",
+      answer:
+        "Kur bileta është e dëmtuar dhe të dhënat nuk mund të shihen, kur përdoret jashtë rrugës së vlefshme, kur është e falsifikuar, ose kur e përdor një person tjetër.",
+    },
+    {
+      prompt: "Çfarë kushtesh duhet të plotësojë një shofer autobusi për të transportuar fëmijët?",
+      answer:
+        "Shoferi duhet të ketë kategorinë përkatëse dhe përvojën e kërkuar: për kategorinë D së paku 1 vit përvojë në D; për D1 deri në 16 vende kërkohet përvojë paraprake sipas rregullave; ose përvojë në kategorinë C kur kjo parashihet për transportin e fëmijëve.",
+    },
+    {
+      prompt: "Cilat kushte duhet të plotësohen gjatë transportimit të pasagjerëve për nevojat e tyre?",
+      answer:
+        "Transporti kryhet për qëllime jokomerciale dhe lidhet me pronarin ose veprimtarinë e tij. Automjeti është në pronësi ose me qira, ndërsa shoferi është pronari, anëtar i familjes ose punonjës i pronarit.",
+    },
+  ],
+  partThree: {
+    summary:
+      "Në Austri, në bazë të një kundërshtimi, Alpine Fun Sports transporton grupe fëmijësh nga shkolla fillore në Altenmarkt në vendpushimin e skive në Flachau. Ju kryeni transport tre herë në javë. Jeni të punësuar në kompaninë e transportit Zima Tours, Ulica Maršala Tita 17, Jesenice. Numri i regjistrimit të autobusit është KR 673- CR. Distanca midis Altenmarkt dhe Flachau është 11 km. Do të nisni me transportin në datën 1 dhjetor 2017. Të hënën 34 fëmijë shkojnë në qendrën e skive dhe 28 largohen nga qendra; të mërkurën 25 shkojnë dhe 25 kthehen; të premten 30 shkojnë dhe 24 kthehen.",
+    subquestions: [
+      {
+        prompt: "Plotësoni dokumentin e udhëtimit për 1 javë.",
+        answer:
+          "Dokumenti i udhëtimit plotësohet për transportuesin Zima Tours, Ulica Maršala Tita 17, Jesenice, me autobus KR 673-CR, klient Alpine Fun Sports, relacion Altenmarkt - Flachau, distancë 11 km. Shënohen udhëtimet javore: e hënë 34 fëmijë për në qendrën e skive dhe 28 kthim, e mërkurë 25 për në qendrën e skive dhe 25 kthim, e premte 30 për në qendrën e skive dhe 24 kthim.",
+      },
+      {
+        prompt: "Çfarë rregullash duhet të respektoni kur kryeni transport të tillë në Republikën e Austrisë?",
+        answer:
+          "Duhet të respektohen rregulloret për peshën dhe dimensionet, rregulloret për transportin e fëmijëve, taksat si TVSH-ja, si dhe rregullat për kohën e vozitjes, pushimet dhe periudhat e pushimit.",
+      },
+    ],
+  },
+};
+
 const makeMultipleChoiceQuestions = (category, testNumber) => {
   const realTest = realTests[category]?.[testNumber];
   if (realTest?.partOne) {
