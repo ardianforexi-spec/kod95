@@ -1,7 +1,7 @@
-
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
 import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 
+const sql = neon(process.env.DATABASE_URL || process.env.POSTGRES_URL || "");
 const validCategories = new Set(["C", "D", "D-PJESSHME"]);
 
 const sendJson = (response, status, body) =>
@@ -76,7 +76,7 @@ export default async function handler(request, response) {
       }
 
       const existing = await sql`SELECT id FROM kod95_users WHERE email = ${email} LIMIT 1`;
-      if (existing.rowCount) {
+      if (existing.length) {
         return sendJson(response, 409, { message: "Ky email ekziston. Provo login." });
       }
 
@@ -87,7 +87,7 @@ export default async function handler(request, response) {
         RETURNING id, name, email, category_id
       `;
 
-      return sendJson(response, 201, { user: toPublicUser(created.rows[0]) });
+      return sendJson(response, 201, { user: toPublicUser(created[0]) });
     }
 
     if (action === "login") {
@@ -98,7 +98,7 @@ export default async function handler(request, response) {
         LIMIT 1
       `;
 
-      const user = result.rows[0];
+      const user = result[0];
       if (!user || !verifyPassword(password, user.password_hash)) {
         return sendJson(response, 401, { message: "Email ose fjalekalim jo i sakte." });
       }
