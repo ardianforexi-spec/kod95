@@ -2286,7 +2286,7 @@ realTests["D-PJESSHME"][3] = {
     {
       prompt: "Në cilin rast transportuesi nuk lëshon një biletë?",
       options: [
-        "Gjatë kryerjes së transportit special të linjës.",
+        "Kada operon me transport publik me orar.",
         "Kur një pasagjer tregon kartën e aftësisë së kufizuar.",
         "Kada kryen transport me linje speciale.",
         "Ndonjëherë nuk mund të sigurojë një vend të lirë për një pasagjer që transferohet në një fluturim më të shkurtër.",
@@ -2296,7 +2296,7 @@ realTests["D-PJESSHME"][3] = {
     {
       prompt: "Cilat dy udhëtime janë bosh kur kryeni transport me udhëtime të alternuara?",
       options: [
-        "I pari në kthim dhe i fundit në dalje.",
+        "Kodi i parë i kthimit dhe kodi i fundit i nisjes.",
         "Dy kodet e para të nisjes.",
         "Dy kodet e fundit të kthimit.",
         "Kodi i parë i nisjes dhe kodi i fundit i kthimit.",
@@ -2307,7 +2307,7 @@ realTests["D-PJESSHME"][3] = {
       prompt: "Çfarë i jepet pasagjerit të cilit i është konfiskuar bileta?",
       options: [
         "Dënim për një biletë të pavlefshme.",
-        "Certifikatë të tërheqjes së biletës.",
+        "Vërtetim për heqjen e biletës së drejtimit.",
         "Thirrni për një seancë dëgjimore në selinë e transportuesit.",
         "Asgjë.",
       ],
@@ -2317,7 +2317,7 @@ realTests["D-PJESSHME"][3] = {
       prompt: "Cili bagazh është bagazh i kontrolluar?",
       options: [
         "Ai që udhëton me të njëjtin mjet me pasagjerin.",
-        "Ai që transportohet në mënyrë të pavarur nga udhëtimi i udhëtarit.",
+        "Ai që transportohet në mënyrë të pavarur nga udhëtimi i pasagjerit.",
         "Ai që humbet ose dëmtohet gjatë transportit.",
         "Një që nuk humbet apo dëmtohet gjatë transportit.",
       ],
@@ -2329,7 +2329,7 @@ realTests["D-PJESSHME"][3] = {
       options: [
         "Transportuesi.",
         "Stafi i stacionit ose stacionit të autobusit.",
-        "Udhëtari.",
+        "Një udhëtar.",
         "Stafi i vozitjes.",
       ],
       correctIndex: 2,
@@ -2349,8 +2349,7 @@ realTests["D-PJESSHME"][3] = {
       prompt: "Kur duhet shoferi të informojë stacionin më të afërt të autobusit për vonesën?",
       options: [
         "Nëse gjatë udhëtimit krijohen rrethana që shkaktojnë një vonesë më shumë se 15 minuta.",
-        "Nëse ka rrethana gjatë udhëtimit, për shkak të të cilave do të pritej vonesë prej më shumë se 30
-minuta.",
+        "Nëse gjatë udhëtimit krijohen rrethana që shkaktojnë një vonesë më shumë se 30 minuta.",
         "Ai nuk është i detyruar të informojë.",
         "Nëse lindin rrethana gjatë udhëtimit, për shkak të të cilave ai parashikon një vonesë prej më shumë se një ore.",
       ],
@@ -2359,8 +2358,7 @@ minuta.",
     {
       prompt: "Çfarë është fatura e udhëtarëve?",
       options: [
-        "Është dokument shoqërues që zëvendëson lejen për transport të rastit në transportin rrugor
-ndërkombëtar të udhëtarëve.",
+        "Dokument shoqërues që zëvendëson lejen për transport të rastit në transportin rrugor ndërkombëtar të udhëtarëve.",
         "Urdhër udhëtimi për transport të rastësishëm të mallrave.",
         "Dokument shoqërues që zëvendëson licencën për transportin liner në transportin rrugor ndërkombëtar të udhëtarëve.",
         "Dokument shoqërues që zëvendëson lejen e transportit të pasagjerëve me autotaksi.",
@@ -2383,7 +2381,7 @@ ndërkombëtar të udhëtarëve.",
       options: [
         "Po, gjithsesi.",
         "Jo, në asnjë rrethanë.",
-        "Po, nëse transporti nuk fillon në kohën e paracaktuar.
+        "Po, nëse transporti nuk bëhet në kohën e paracaktuar.",
         "Po, nëse transporti ka filluar në kohë ose ka përfunduar me vonesë për shkak të trafikut të rënduar.",
       ],
       correctIndex: 2,
@@ -2532,6 +2530,8 @@ const state = {
   questionFilter: "all",
 };
 
+let saveAnswersTimer = null;
+
 const authShell = document.getElementById("auth-shell");
 const appShell = document.getElementById("app-shell");
 const loginTab = document.getElementById("login-tab");
@@ -2592,6 +2592,59 @@ const readSavedAnswers = () => safeReadJson(storageKeys.answers, {});
 const writeSavedAnswers = (answers) =>
   localStorage.setItem(storageKeys.answers, JSON.stringify(answers));
 
+const apiRequest = async (url, options = {}) => {
+  const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+    ...options,
+  });
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const error = new Error(data.message || "Kerkesa nuk u krye.");
+    error.status = response.status;
+    throw error;
+  }
+
+  return data;
+};
+
+const authRequest = (payload) =>
+  apiRequest("/api/auth", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+const loadRemoteAnswers = async (testId = state.selectedTestId) => {
+  if (!state.currentUser?.email || !testId) {
+    return null;
+  }
+
+  const params = new URLSearchParams({
+    email: state.currentUser.email,
+    testId,
+  });
+  const data = await apiRequest(`/api/answers?${params.toString()}`);
+  return data.answers || {};
+};
+
+const saveRemoteAnswers = async (testId = state.selectedTestId, answers = state.answers) => {
+  if (!state.currentUser?.email || !testId) {
+    return;
+  }
+
+  await apiRequest("/api/answers", {
+    method: "POST",
+    body: JSON.stringify({
+      email: state.currentUser.email,
+      testId,
+      answers,
+    }),
+  });
+};
+
 const getCurrentCategory = () =>
   appData.categories.find((category) => category.id === state.currentUser.categoryId) ||
   appData.categories[0];
@@ -2603,19 +2656,44 @@ const getSelectedTest = () =>
 const getAnswerStorageKey = (testId = state.selectedTestId) =>
   `${state.currentUser.email}:${testId}`;
 
+const saveAnswersLocally = (testId = state.selectedTestId, answers = state.answers) => {
+  if (!state.currentUser || !testId) {
+    return;
+  }
+
+  const savedAnswers = readSavedAnswers();
+  savedAnswers[getAnswerStorageKey(testId)] = answers;
+  writeSavedAnswers(savedAnswers);
+};
+
 const saveAnswers = () => {
   if (!state.currentUser || !state.selectedTestId) {
     return;
   }
 
-  const savedAnswers = readSavedAnswers();
-  savedAnswers[getAnswerStorageKey()] = state.answers;
-  writeSavedAnswers(savedAnswers);
+  saveAnswersLocally();
+
+  window.clearTimeout(saveAnswersTimer);
+  saveAnswersTimer = window.setTimeout(() => {
+    saveRemoteAnswers().catch(() => {
+      authStatus.textContent = "Pergjigjet u ruajten lokalisht. Databaza nuk eshte lidhur ende.";
+    });
+  }, 450);
 };
 
-const loadAnswers = () => {
+const loadAnswers = async () => {
   const savedAnswers = readSavedAnswers();
   state.answers = savedAnswers[getAnswerStorageKey()] || {};
+
+  try {
+    const remoteAnswers = await loadRemoteAnswers();
+    state.answers = remoteAnswers;
+    saveAnswersLocally();
+  } catch (error) {
+    if (authStatus && state.currentUser) {
+      authStatus.textContent = "Databaza nuk u lexua, po perdoren pergjigjet lokale.";
+    }
+  }
 };
 
 const createMetaPill = (label) => {
@@ -2953,7 +3031,7 @@ const renderProfile = () => {
   activeCategoryDescription.textContent = category.description;
 };
 
-const renderApp = () => {
+const renderApp = async () => {
   if (!state.currentUser) {
     authShell.classList.remove("is-hidden");
     appShell.classList.add("is-hidden");
@@ -2968,7 +3046,7 @@ const renderApp = () => {
     state.selectedTestId = category.tests[0].id;
   }
 
-  loadAnswers();
+  await loadAnswers();
   if (questionSearch) {
     questionSearch.value = state.questionSearch;
   }
@@ -2983,8 +3061,8 @@ const renderApp = () => {
   renderTestContent();
 };
 
-loginTab.addEventListener("click", () => setAuthMode("login"));
-registerTab.addEventListener("click", () => setAuthMode("register"));
+loginTab?.addEventListener("click", () => setAuthMode("login"));
+registerTab?.addEventListener("click", () => setAuthMode("register"));
 
 if (questionSearch) {
   questionSearch.addEventListener("input", (event) => {
@@ -3008,7 +3086,7 @@ if (clearTestButton) {
   });
 }
 
-registerForm.addEventListener("submit", (event) => {
+registerForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const users = readUsers();
@@ -3017,35 +3095,75 @@ registerForm.addEventListener("submit", (event) => {
   const password = document.getElementById("register-password").value;
   const categoryId = document.getElementById("register-category").value;
 
-  const exists = users.some((user) => user.email === email);
-  if (exists) {
-    authStatus.textContent = "Ky email ekziston. Provo login ose nje email tjeter.";
-    return;
+  authStatus.textContent = "Duke krijuar account...";
+
+  let user = null;
+  try {
+    const data = await authRequest({
+      action: "register",
+      name,
+      email,
+      password,
+      categoryId,
+    });
+    user = data.user;
+  } catch (error) {
+    if (error.status && error.status < 500) {
+      authStatus.textContent = error.message;
+      return;
+    }
+
+    const exists = users.some((item) => item.email === email);
+    if (exists) {
+      authStatus.textContent = "Ky email ekziston. Provo login ose nje email tjeter.";
+      return;
+    }
+
+    user = { name, email, password, categoryId };
+    users.push(user);
+    writeUsers(users);
+    authStatus.textContent = "API nuk eshte gati ende, account u ruajt lokalisht.";
   }
 
-  const user = { name, email, password, categoryId };
-  users.push(user);
-  writeUsers(users);
   state.currentUser = user;
   state.selectedTestId = null;
   state.questionSearch = "";
   state.questionFilter = "all";
   saveSession(user);
   registerForm.reset();
-  renderApp();
+  await renderApp();
 });
 
-loginForm.addEventListener("submit", (event) => {
+loginForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const email = document.getElementById("login-email").value.trim().toLowerCase();
   const password = document.getElementById("login-password").value;
   const users = readUsers();
 
-  const user = users.find((item) => item.email === email && item.password === password);
-  if (!user) {
-    authStatus.textContent = "Email ose fjalekalim jo i sakte.";
-    return;
+  authStatus.textContent = "Duke hyre...";
+
+  let user = null;
+  try {
+    const data = await authRequest({
+      action: "login",
+      email,
+      password,
+    });
+    user = data.user;
+  } catch (error) {
+    if (error.status && error.status < 500) {
+      authStatus.textContent = error.message;
+      return;
+    }
+
+    user = users.find((item) => item.email === email && item.password === password);
+    if (!user) {
+      authStatus.textContent = "Email ose fjalekalim jo i sakte.";
+      return;
+    }
+
+    authStatus.textContent = "API nuk eshte gati ende, po hyn me account lokal.";
   }
 
   state.currentUser = user;
@@ -3054,10 +3172,10 @@ loginForm.addEventListener("submit", (event) => {
   state.questionFilter = "all";
   saveSession(user);
   loginForm.reset();
-  renderApp();
+  await renderApp();
 });
 
-logoutButton.addEventListener("click", () => {
+logoutButton?.addEventListener("click", () => {
   state.currentUser = null;
   state.selectedTestId = null;
   state.answers = {};
@@ -3067,13 +3185,24 @@ logoutButton.addEventListener("click", () => {
   renderApp();
 });
 
-const boot = () => {
-  const existingSession = readSession();
-  if (existingSession) {
-    state.currentUser = existingSession;
+const boot = async () => {
+  try {
+    const existingSession = readSession();
+    if (existingSession) {
+      state.currentUser = existingSession;
+    }
+    setAuthMode("login");
+    await renderApp();
+  } catch (error) {
+    state.currentUser = null;
+    clearSession();
+    setAuthMode("login");
+    authShell.classList.remove("is-hidden");
+    appShell.classList.add("is-hidden");
+    if (authStatus) {
+      authStatus.textContent = "Aplikacioni u rifreskua. Provo regjistrimin edhe nje here.";
+    }
   }
-  setAuthMode("login");
-  renderApp();
 };
 
 boot();
