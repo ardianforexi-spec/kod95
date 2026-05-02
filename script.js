@@ -1,6 +1,7 @@
 const storageKeys = {
   users: "kod95-users",
   session: "kod95-session",
+  answers: "kod95-answers",
 };
 
 const questionCounts = {
@@ -2373,6 +2374,8 @@ const state = {
   currentUser: null,
   selectedTestId: null,
   answers: {},
+  questionSearch: "",
+  questionFilter: "all",
 };
 
 const authShell = document.getElementById("auth-shell");
@@ -2392,18 +2395,45 @@ const profileCategory = document.getElementById("profile-category");
 const activeCategoryBadge = document.getElementById("active-category-badge");
 const activeCategoryDescription = document.getElementById("active-category-description");
 const logoutButton = document.getElementById("logout-btn");
+const progressLabel = document.getElementById("progress-label");
+const progressCount = document.getElementById("progress-count");
+const progressBar = document.getElementById("progress-bar");
+const questionSearch = document.getElementById("question-search");
+const questionFilter = document.getElementById("question-filter");
+const clearTestButton = document.getElementById("clear-test-btn");
 
 const readUsers = () => JSON.parse(localStorage.getItem(storageKeys.users) || "[]");
 const writeUsers = (users) => localStorage.setItem(storageKeys.users, JSON.stringify(users));
 const saveSession = (user) => localStorage.setItem(storageKeys.session, JSON.stringify(user));
 const readSession = () => JSON.parse(localStorage.getItem(storageKeys.session) || "null");
 const clearSession = () => localStorage.removeItem(storageKeys.session);
+const readSavedAnswers = () => JSON.parse(localStorage.getItem(storageKeys.answers) || "{}");
+const writeSavedAnswers = (answers) =>
+  localStorage.setItem(storageKeys.answers, JSON.stringify(answers));
 
 const getCurrentCategory = () =>
   appData.categories.find((category) => category.id === state.currentUser.categoryId);
 
 const getSelectedTest = () =>
   getCurrentCategory().tests.find((test) => test.id === state.selectedTestId);
+
+const getAnswerStorageKey = (testId = state.selectedTestId) =>
+  `${state.currentUser.email}:${testId}`;
+
+const saveAnswers = () => {
+  if (!state.currentUser || !state.selectedTestId) {
+    return;
+  }
+
+  const savedAnswers = readSavedAnswers();
+  savedAnswers[getAnswerStorageKey()] = state.answers;
+  writeSavedAnswers(savedAnswers);
+};
+
+const loadAnswers = () => {
+  const savedAnswers = readSavedAnswers();
+  state.answers = savedAnswers[getAnswerStorageKey()] || {};
+};
 
 const createMetaPill = (label) => {
   const pill = document.createElement("span");
@@ -2427,6 +2457,87 @@ const getAnswerState = (questionId, correctIndex) => {
     return "unanswered";
   }
   return selectedIndex === correctIndex ? "correct" : "wrong";
+};
+
+const getAllQuestions = (test) => [
+  ...test.partOne.map((question) => ({ ...question, type: "choice" })),
+  ...test.partTwo.map((question) => ({ ...question, type: "written" })),
+  ...test.partThree.subquestions.map((question) => ({ ...question, type: "written" })),
+];
+
+const isQuestionAnswered = (question) => {
+  const answer = state.answers[question.id];
+  if (question.type === "choice") {
+    return answer !== undefined;
+  }
+
+  return typeof answer === "string" && answer.trim().length > 0;
+};
+
+const getProgress = (test) => {
+  const questions = getAllQuestions(test);
+  const answered = questions.filter(isQuestionAnswered).length;
+  const total = questions.length;
+  const percent = total ? Math.round((answered / total) * 100) : 0;
+
+  return { answered, total, percent };
+};
+
+const renderProgress = () => {
+  const test = getSelectedTest();
+  const { answered, total, percent } = getProgress(test);
+
+  progressLabel.textContent = `${percent}% e perfunduar`;
+  progressCount.textContent = `${answered}/${total}`;
+  progressBar.style.width = `${percent}%`;
+};
+
+const normalizeSearch = (value) => value.toLowerCase().trim();
+
+const questionMatchesSearch = (question) => {
+  const search = normalizeSearch(state.questionSearch);
+  if (!search) {
+    return true;
+  }
+
+  const searchableText = [
+    question.prompt,
+    question.answer,
+    ...(question.options || []),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return searchableText.includes(search);
+};
+
+const questionMatchesFilter = (question) => {
+  if (state.questionFilter === "all") {
+    return true;
+  }
+
+  if (state.questionFilter === "unanswered") {
+    return !isQuestionAnswered(question);
+  }
+
+  if (state.questionFilter === "wrong") {
+    return question.type === "choice" && getAnswerState(question.id, question.correctIndex) === "wrong";
+  }
+
+  return true;
+};
+
+const getVisibleQuestions = (questions, type) =>
+  questions
+    .map((question) => ({ ...question, type }))
+    .filter((question) => questionMatchesSearch(question) && questionMatchesFilter(question));
+
+const createEmptyState = () => {
+  const empty = document.createElement("p");
+  empty.className = "empty-state";
+  empty.textContent = "Nuk ka pyetje qe perputhen me kerkimin ose filtrin aktual.";
+  return empty;
 };
 
 const createMultipleChoiceCard = (question, index) => {
@@ -2463,6 +2574,7 @@ const createMultipleChoiceCard = (question, index) => {
     button.innerHTML = `<span>${["A", "B", "C", "D"][optionIndex]}</span>${option}`;
     button.addEventListener("click", () => {
       state.answers[question.id] = optionIndex;
+      saveAnswers();
       renderTestContent();
     });
     answerGrid.appendChild(button);
@@ -2492,6 +2604,8 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
   textarea.value = state.answers[question.id] || "";
   textarea.addEventListener("input", (event) => {
     state.answers[question.id] = event.target.value;
+    saveAnswers();
+    renderProgress();
   });
 
   const actionRow = document.createElement("div");
@@ -2527,6 +2641,8 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
   resetButton.addEventListener("click", () => {
     state.answers[question.id] = "";
     textarea.value = "";
+    saveAnswers();
+    renderProgress();
   });
 
   actionRow.append(toggleButton, resetButton);
@@ -2557,23 +2673,32 @@ const createSectionCard = (titleText, introText) => {
 const renderTestContent = () => {
   const test = getSelectedTest();
   testContainer.innerHTML = "";
+  renderProgress();
+
+  const visiblePartOne = getVisibleQuestions(test.partOne, "choice");
+  const visiblePartTwo = getVisibleQuestions(test.partTwo, "written");
+  const visiblePartThree = getVisibleQuestions(test.partThree.subquestions, "written");
 
   const partOne = createSectionCard(
     "Pjesa 1: Pyetje me alternativa",
     "Zgjidh nje alternative. Secila pyetje vlen 1 pike. Nese eshte e sakte shfaqet me ngjyre te gjelber, nese eshte gabim shfaqet me te kuqe dhe mund ta permiresosh menjehere."
   );
   partOne.classList.add("section-card--multiple-choice");
-  test.partOne.forEach((question, index) => {
-    partOne.appendChild(createMultipleChoiceCard(question, index));
-  });
+  visiblePartOne.length
+    ? visiblePartOne.forEach((question, index) => {
+        partOne.appendChild(createMultipleChoiceCard(question, index));
+      })
+    : partOne.appendChild(createEmptyState());
 
   const partTwo = createSectionCard(
     "Pjesa 2: Pergjigje me shkrim",
     "Kjo pjese ruan gjeresine e plote te faqes. Kandidati shkruan pergjigjen dhe mund ta hape zgjidhjen orientuese me nje klikim."
   );
-  test.partTwo.forEach((question, index) => {
-    partTwo.appendChild(createRevealAnswerCard(question, index, "Pyetja"));
-  });
+  visiblePartTwo.length
+    ? visiblePartTwo.forEach((question, index) => {
+        partTwo.appendChild(createRevealAnswerCard(question, index, "Pyetja"));
+      })
+    : partTwo.appendChild(createEmptyState());
 
   const partThree = createSectionCard(
     "Pjesa 3: Detyra finale me nenpyetje",
@@ -2585,9 +2710,11 @@ const renderTestContent = () => {
   taskSummary.textContent = test.partThree.summary;
   partThree.appendChild(taskSummary);
 
-  test.partThree.subquestions.forEach((question, index) => {
-    partThree.appendChild(createRevealAnswerCard(question, index, "Nenpyetja"));
-  });
+  visiblePartThree.length
+    ? visiblePartThree.forEach((question, index) => {
+        partThree.appendChild(createRevealAnswerCard(question, index, "Nenpyetja"));
+      })
+    : partThree.appendChild(createEmptyState());
 
   testContainer.append(partOne, partTwo, partThree);
 };
@@ -2608,15 +2735,23 @@ const renderHeader = () => {
 
 const renderTestList = () => {
   const category = getCurrentCategory();
+  const savedAnswers = readSavedAnswers();
   testList.innerHTML = "";
 
   category.tests.forEach((test) => {
+    const originalAnswers = state.answers;
+    state.answers = savedAnswers[getAnswerStorageKey(test.id)] || {};
+    const { percent } = getProgress(test);
+    state.answers = originalAnswers;
+
     const button = document.createElement("button");
     button.type = "button";
     button.className = `test-btn${test.id === state.selectedTestId ? " is-active" : ""}`;
-    button.textContent = test.name;
+    button.innerHTML = `<span>${test.name}</span><small>${percent}%</small>`;
     button.addEventListener("click", () => {
       state.selectedTestId = test.id;
+      state.questionSearch = "";
+      state.questionFilter = "all";
       renderApp();
     });
     testList.appendChild(button);
@@ -2646,6 +2781,10 @@ const renderApp = () => {
     state.selectedTestId = category.tests[0].id;
   }
 
+  loadAnswers();
+  questionSearch.value = state.questionSearch;
+  questionFilter.value = state.questionFilter;
+
   renderProfile();
   renderTestList();
   renderHeader();
@@ -2654,6 +2793,22 @@ const renderApp = () => {
 
 loginTab.addEventListener("click", () => setAuthMode("login"));
 registerTab.addEventListener("click", () => setAuthMode("register"));
+
+questionSearch.addEventListener("input", (event) => {
+  state.questionSearch = event.target.value;
+  renderTestContent();
+});
+
+questionFilter.addEventListener("change", (event) => {
+  state.questionFilter = event.target.value;
+  renderTestContent();
+});
+
+clearTestButton.addEventListener("click", () => {
+  state.answers = {};
+  saveAnswers();
+  renderApp();
+});
 
 registerForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -2675,6 +2830,8 @@ registerForm.addEventListener("submit", (event) => {
   writeUsers(users);
   state.currentUser = user;
   state.selectedTestId = null;
+  state.questionSearch = "";
+  state.questionFilter = "all";
   saveSession(user);
   registerForm.reset();
   renderApp();
@@ -2695,6 +2852,8 @@ loginForm.addEventListener("submit", (event) => {
 
   state.currentUser = user;
   state.selectedTestId = null;
+  state.questionSearch = "";
+  state.questionFilter = "all";
   saveSession(user);
   loginForm.reset();
   renderApp();
@@ -2704,6 +2863,8 @@ logoutButton.addEventListener("click", () => {
   state.currentUser = null;
   state.selectedTestId = null;
   state.answers = {};
+  state.questionSearch = "";
+  state.questionFilter = "all";
   clearSession();
   renderApp();
 });
