@@ -149,6 +149,29 @@
       </main>
     </div>
 
+    <script>
+      (() => {
+        const loginTab = document.getElementById("login-tab");
+        const registerTab = document.getElementById("register-tab");
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+        const authStatus = document.getElementById("auth-status");
+
+        const switchAuthMode = (mode) => {
+          const isLogin = mode === "login";
+          loginTab?.classList.toggle("is-active", isLogin);
+          registerTab?.classList.toggle("is-active", !isLogin);
+          loginForm?.classList.toggle("is-hidden", !isLogin);
+          registerForm?.classList.toggle("is-hidden", isLogin);
+          if (authStatus) {
+            authStatus.textContent = "";
+          }
+        };
+
+        loginTab?.addEventListener("click", () => switchAuthMode("login"));
+        registerTab?.addEventListener("click", () => switchAuthMode("register"));
+      })();
+    </script>
     <script src="script.js"></script>
   </body>
 </html>
