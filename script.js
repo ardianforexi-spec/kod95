@@ -2535,6 +2535,7 @@ const state = {
 };
 
 let saveAnswersTimer = null;
+let activeImageEditor = null;
 
 const authShell = document.getElementById("auth-shell");
 const appShell = document.getElementById("app-shell");
@@ -2809,6 +2810,219 @@ const createEmptyState = () => {
   return empty;
 };
 
+const getImageNotesKey = (questionId) => `${questionId}-image-notes`;
+
+const getImageNotes = (questionId) => {
+  const notes = state.answers[getImageNotesKey(questionId)];
+  return Array.isArray(notes) ? notes : [];
+};
+
+const saveImageNotes = (questionId, notes) => {
+  state.answers[getImageNotesKey(questionId)] = notes;
+  saveAnswers();
+};
+
+const closeImageEditor = () => {
+  if (!activeImageEditor) {
+    return;
+  }
+
+  activeImageEditor.remove();
+  activeImageEditor = null;
+  document.body.classList.remove("is-editor-open");
+};
+
+const openImageEditor = (question) => {
+  closeImageEditor();
+
+  const notes = getImageNotes(question.id).map((note) => ({ ...note }));
+  let zoom = 1;
+
+  const modal = document.createElement("div");
+  modal.className = "image-editor-modal";
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+
+  const panel = document.createElement("div");
+  panel.className = "image-editor-panel";
+
+  const toolbar = document.createElement("div");
+  toolbar.className = "image-editor-toolbar";
+
+  const title = document.createElement("div");
+  title.className = "image-editor-title";
+  title.textContent = "Sheno mbi foto";
+
+  const actions = document.createElement("div");
+  actions.className = "image-editor-actions";
+
+  const addTextButton = document.createElement("button");
+  addTextButton.type = "button";
+  addTextButton.className = "image-editor-btn";
+  addTextButton.textContent = "Shto tekst";
+
+  const zoomOutButton = document.createElement("button");
+  zoomOutButton.type = "button";
+  zoomOutButton.className = "image-editor-btn image-editor-btn--icon";
+  zoomOutButton.textContent = "-";
+  zoomOutButton.setAttribute("aria-label", "Zvogelo foton");
+
+  const zoomLabel = document.createElement("span");
+  zoomLabel.className = "image-editor-zoom";
+
+  const zoomInButton = document.createElement("button");
+  zoomInButton.type = "button";
+  zoomInButton.className = "image-editor-btn image-editor-btn--icon";
+  zoomInButton.textContent = "+";
+  zoomInButton.setAttribute("aria-label", "Zmadho foton");
+
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.className = "image-editor-btn image-editor-btn--secondary";
+  closeButton.textContent = "Mbyll";
+
+  const viewport = document.createElement("div");
+  viewport.className = "image-editor-viewport";
+
+  const stage = document.createElement("div");
+  stage.className = "image-editor-stage";
+
+  const image = document.createElement("img");
+  image.src = question.image.src;
+  image.alt = question.image.alt || "";
+  image.className = "image-editor-image";
+
+  const noteLayer = document.createElement("div");
+  noteLayer.className = "image-editor-note-layer";
+
+  const updateZoom = () => {
+    stage.style.transform = `scale(${zoom})`;
+    zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
+  };
+
+  const renderNotes = () => {
+    noteLayer.innerHTML = "";
+
+    notes.forEach((note) => {
+      const noteElement = document.createElement("div");
+      noteElement.className = "image-note";
+      noteElement.style.left = `${note.x}%`;
+      noteElement.style.top = `${note.y}%`;
+
+      const handle = document.createElement("button");
+      handle.type = "button";
+      handle.className = "image-note__handle";
+      handle.textContent = "Leviz";
+
+      const text = document.createElement("div");
+      text.className = "image-note__text";
+      text.contentEditable = "true";
+      text.textContent = note.text || "Shkruaj ketu";
+      text.setAttribute("aria-label", "Teksti mbi foto");
+
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.className = "image-note__remove";
+      removeButton.textContent = "x";
+      removeButton.setAttribute("aria-label", "Hiqe tekstin");
+
+      text.addEventListener("input", () => {
+        note.text = text.textContent.trim();
+        saveImageNotes(question.id, notes);
+      });
+
+      removeButton.addEventListener("click", () => {
+        const index = notes.findIndex((item) => item.id === note.id);
+        if (index >= 0) {
+          notes.splice(index, 1);
+          saveImageNotes(question.id, notes);
+          renderNotes();
+        }
+      });
+
+      handle.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        handle.setPointerCapture(event.pointerId);
+
+        const moveNote = (moveEvent) => {
+          const rect = stage.getBoundingClientRect();
+          const x = ((moveEvent.clientX - rect.left) / rect.width) * 100;
+          const y = ((moveEvent.clientY - rect.top) / rect.height) * 100;
+          note.x = Math.max(0, Math.min(92, x));
+          note.y = Math.max(0, Math.min(92, y));
+          noteElement.style.left = `${note.x}%`;
+          noteElement.style.top = `${note.y}%`;
+        };
+
+        const stopMove = () => {
+          handle.removeEventListener("pointermove", moveNote);
+          handle.removeEventListener("pointerup", stopMove);
+          handle.removeEventListener("pointercancel", stopMove);
+          saveImageNotes(question.id, notes);
+        };
+
+        handle.addEventListener("pointermove", moveNote);
+        handle.addEventListener("pointerup", stopMove);
+        handle.addEventListener("pointercancel", stopMove);
+      });
+
+      noteElement.append(handle, text, removeButton);
+      noteLayer.appendChild(noteElement);
+    });
+  };
+
+  addTextButton.addEventListener("click", () => {
+    notes.push({
+      id: `note-${Date.now()}`,
+      text: "Shkruaj ketu",
+      x: 12,
+      y: 12,
+    });
+    saveImageNotes(question.id, notes);
+    renderNotes();
+  });
+
+  zoomOutButton.addEventListener("click", () => {
+    zoom = Math.max(0.5, Number((zoom - 0.25).toFixed(2)));
+    updateZoom();
+  });
+
+  zoomInButton.addEventListener("click", () => {
+    zoom = Math.min(3, Number((zoom + 0.25).toFixed(2)));
+    updateZoom();
+  });
+
+  closeButton.addEventListener("click", closeImageEditor);
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      closeImageEditor();
+    }
+  });
+
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.key === "Escape") {
+        closeImageEditor();
+      }
+    },
+    { once: true }
+  );
+
+  actions.append(addTextButton, zoomOutButton, zoomLabel, zoomInButton, closeButton);
+  toolbar.append(title, actions);
+  stage.append(image, noteLayer);
+  viewport.appendChild(stage);
+  panel.append(toolbar, viewport);
+  modal.appendChild(panel);
+  document.body.appendChild(modal);
+  document.body.classList.add("is-editor-open");
+  activeImageEditor = modal;
+
+  updateZoom();
+  renderNotes();
+};
+
 const createMultipleChoiceCard = (question, index) => {
   const card = document.createElement("article");
   card.className = "question-card";
@@ -2899,6 +3113,15 @@ const createRevealAnswerCard = (question, index, labelPrefix) => {
     media.className = "question-image";
     media.src = question.image.src;
     media.alt = question.image.alt || "";
+    media.title = "Kliko per ta zmadhuar dhe per te shkruar mbi foto";
+    media.tabIndex = 0;
+    media.addEventListener("click", () => openImageEditor(question));
+    media.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openImageEditor(question);
+      }
+    });
   }
 
   toggleButton.addEventListener("click", () => {
