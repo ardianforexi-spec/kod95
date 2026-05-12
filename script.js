@@ -2686,6 +2686,25 @@ const saveAnswers = () => {
   }, 450);
 };
 
+const clearCurrentTestAnswers = async () => {
+  if (!state.currentUser || !state.selectedTestId) {
+    return;
+  }
+
+  const testId = state.selectedTestId;
+  state.answers = {};
+  saveAnswersLocally(testId, {});
+  window.clearTimeout(saveAnswersTimer);
+
+  try {
+    await saveRemoteAnswers(testId, {});
+  } catch (error) {
+    if (authStatus) {
+      authStatus.textContent = "Testi u pastrua lokalisht. Databaza nuk eshte lidhur ende.";
+    }
+  }
+};
+
 const loadAnswers = async () => {
   const savedAnswers = readSavedAnswers();
   state.answers = savedAnswers[getAnswerStorageKey()] || {};
@@ -3306,10 +3325,10 @@ if (questionFilter) {
 }
 
 if (clearTestButton) {
-  clearTestButton.addEventListener("click", () => {
-    state.answers = {};
-    saveAnswers();
-    renderApp();
+  clearTestButton.addEventListener("click", async () => {
+    await clearCurrentTestAnswers();
+    renderTestList();
+    renderTestContent();
   });
 }
 
